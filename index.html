@@ -3,104 +3,91 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Happy Birthday 🎂</title>
+<meta name="theme-color" content="#0b0620">
+<title>Happy Birthday, Toek Keovoleak</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-<style>
-:root{--bg1:#ffd1e3;--bg2:#c9b6ff;--ink:#4a1d4f;--accent:#ff4f8b;--card:rgba(255,255,255,.75)}
-*{box-sizing:border-box;margin:0}
-body{min-height:100vh;font-family:"Kantumruy Pro",system-ui,sans-serif;color:var(--ink);
-background:linear-gradient(160deg,var(--bg1),var(--bg2));overflow-x:hidden;text-align:center}
-canvas{position:fixed;inset:0;pointer-events:none;z-index:5}
-section{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px;gap:18px}
-h1{font-family:"Dancing Script","Kantumruy Pro",cursive;font-size:clamp(2.6rem,10vw,5rem);color:var(--accent);text-shadow:0 3px 0 #fff}
-.name{font-size:clamp(1.6rem,6vw,2.6rem);font-weight:700}
-.sub{max-width:34rem;line-height:1.8;font-size:1.05rem}
-button{font:inherit;font-weight:600;border:0;border-radius:999px;padding:14px 30px;background:var(--accent);color:#fff;
-box-shadow:0 6px 0 #c42e69;cursor:pointer;transition:.1s}
-button:active{transform:translateY(4px);box-shadow:0 2px 0 #c42e69}
-.cake{position:relative;width:200px;height:170px;margin-top:40px}
-.layer{position:absolute;left:0;right:0;border-radius:14px}
-.l1{bottom:0;height:70px;background:#ff8fb5}
-.l2{bottom:70px;left:25px;right:25px;height:55px;background:#ffb8d1}
-.l1::after,.l2::after{content:"";position:absolute;top:0;left:0;right:0;height:16px;border-radius:14px 14px 40px 40px;background:#fff}
-.candle{position:absolute;bottom:125px;left:calc(50% - 5px);width:10px;height:36px;background:repeating-linear-gradient(45deg,#fff 0 6px,#6ec1ff 6px 12px);border-radius:3px}
-.flame{position:absolute;top:-24px;left:-3px;width:16px;height:22px;background:radial-gradient(#fff 15%,#ffd54a 45%,#ff8a00);border-radius:50% 50% 50% 50%/60% 60% 40% 40%;animation:fl .3s infinite alternate;transition:opacity .4s}
-.out .flame{opacity:0}
-@keyframes fl{to{transform:scale(1.15,.92) rotate(3deg)}}
-.card{background:var(--card);backdrop-filter:blur(6px);border-radius:24px;padding:28px 24px;max-width:36rem;width:100%;box-shadow:0 10px 30px rgba(74,29,79,.18)}
-.card p{line-height:2;font-size:1.1rem}
-.hidden{display:none}
-.fade{animation:in .9s both}
-@keyframes in{from{opacity:0;transform:translateY(20px)}}
-.photos{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px}
-.photos img{width:140px;height:140px;object-fit:cover;border-radius:16px;border:4px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.15)}
-</style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<canvas id="fx"></canvas>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<canvas id="stars" aria-hidden="true"></canvas>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="progress" aria-hidden="true"><b id="bar"></b></div>
 
-<section id="s1">
-  <div style="font-size:3rem">🎈🎉🎈</div>
-  <h1>Happy Birthday</h1>
-  <p class="name" id="who"></p>
-  <p class="sub">Something special is waiting for you… tap the button below 💖</p>
-  <button id="open">Open your gift 🎁</button>
-</section>
-
-<section id="s2" class="hidden">
-  <p class="sub">Make a wish… then blow out the candle 🕯️</p>
-  <div class="cake" id="cake">
-    <div class="layer l2"></div><div class="layer l1"></div>
-    <div class="candle"><div class="flame"></div></div>
+<!-- 1 · Welcome -->
+<section id="s1" class="screen active">
+  <div class="glass hero tilt">
+    <p class="eyebrow reveal">A little surprise</p>
+    <h1 class="reveal"><span>Happy</span> <em>Birthday</em></h1>
+    <p class="name reveal" id="who"></p>
+    <p class="lead reveal">Something special is waiting for you. Tap below to open it.</p>
+    <button class="btn reveal" id="open"><span>Open your gift</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
   </div>
-  <button id="blow">Blow the candle 💨</button>
 </section>
 
-<section id="s3" class="hidden">
-  <h1 class="fade">Happy Birthday! 🎂</h1>
-  <div class="card fade" style="animation-delay:.4s">
-    <p id="msg"></p>
-    <div class="photos" id="photos"></div>
+<!-- 2 · Cake -->
+<section id="s2" class="screen">
+  <div class="glass stage">
+    <p class="eyebrow">Step 2 of 3</p>
+    <h2>Make a wish</h2>
+    <p class="lead">Close your eyes, then blow out the candle.</p>
+    <div class="cake" id="cake" aria-label="Birthday cake">
+      <svg viewBox="0 0 240 240" role="img" aria-hidden="true">
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9ac1"/><stop offset="1" stop-color="#e0407f"/></linearGradient>
+          <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd0e2"/><stop offset="1" stop-color="#ff8fb8"/></linearGradient>
+          <radialGradient id="gf" cx=".5" cy=".7" r=".6"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#ffe27a"/><stop offset="1" stop-color="#ff8a00"/></radialGradient>
+        </defs>
+        <ellipse cx="120" cy="226" rx="104" ry="9" fill="#000" opacity=".28"/>
+        <rect x="16" y="150" width="208" height="74" rx="16" fill="url(#g1)"/>
+        <path d="M16 166q13 24 26 0t26 0 26 0 26 0 26 0 26 0 26 0 26 0v-6a16 16 0 0 0-16-16H32a16 16 0 0 0-16 16z" fill="#fff"/>
+        <rect x="52" y="96" width="136" height="60" rx="14" fill="url(#g2)"/>
+        <path d="M52 112q11 20 22 0t22 0 22 0 22 0 22 0 22 0v-4a14 14 0 0 0-14-14H66a14 14 0 0 0-14 14z" fill="#fff"/>
+        <g fill="#7be0ff"><circle cx="48" cy="196" r="5"/><circle cx="92" cy="204" r="5"/><circle cx="148" cy="204" r="5"/><circle cx="192" cy="196" r="5"/></g>
+        <g fill="#ffd54a"><circle cx="70" cy="136" r="4"/><circle cx="120" cy="140" r="4"/><circle cx="170" cy="136" r="4"/></g>
+        <rect x="114" y="52" width="12" height="46" rx="4" fill="#fff"/>
+        <path d="M114 62l12-8M114 74l12-8M114 86l12-8" stroke="#6ec1ff" stroke-width="5"/>
+        <g class="flame"><path d="M120 14c14 16 14 28 0 36-14-8-14-20 0-36z" fill="url(#gf)"/></g>
+      </svg>
+      <span class="smoke" aria-hidden="true"></span>
+    </div>
+    <button class="btn" id="blow"><span>Blow the candle</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h11a3 3 0 1 0-3-3M4 14h15a3 3 0 1 1-3 3M4 19h7"/></svg></button>
   </div>
-  <button id="again">Light it again 🎆</button>
 </section>
 
-<script>
-/* ===== កែប្រែនៅទីនេះ / EDIT HERE ===== */
-const CONFIG = {
-  name: "Toek Keovoleak",   // ឈ្មោះនាង (ឬបន្ថែម ?name=ឈ្មោះ ក្នុង URL)
-  message: [
-    "This birthday, may your face be full of bright smiles and your heart full of peace 🌸",
-    "May every day of your life shine as bright as the candle on this cake, and may all your dreams come true ✨",
-    "You are someone truly special who gives life meaning. May you have good health, good luck, and love all through your life 💖",
-    "Happy Birthday, Toek Keovoleak! 🎂"
-  ],
-  photoBase: "https://pub-33366a170f57436292f2db8cf9762c41.r2.dev/",  // R2 bucket "bubu" (public URL)
-  photos: ["1.jpg","2.jpg","3.jpg","4.jpg"]  // ឈ្មោះឯកសារក្នុង bucket (រូបណាមិនមាន នឹងត្រូវបានលាក់)
-};
-/* ===================================== */
+<!-- 3 · Message & gallery -->
+<section id="s3" class="screen">
+  <div class="wrap">
+    <header class="final">
+      <p class="eyebrow">Your day</p>
+      <h1 class="shine">Happy Birthday!</h1>
+      <p class="name" id="who2"></p>
+    </header>
 
-const $=id=>document.getElementById(id);
-const q=new URLSearchParams(location.search);
-$("who").textContent="For "+(q.get("name")||CONFIG.name)+" 💕";
-$("msg").innerHTML=CONFIG.message.join("<br>");
-CONFIG.photos.forEach(src=>{const i=new Image();i.alt="";i.loading="lazy";i.onerror=()=>i.remove();i.src=CONFIG.photoBase+src;$("photos").appendChild(i)});
+    <article class="glass letter tilt">
+      <div class="seal" aria-hidden="true">♥</div>
+      <p id="msg" class="typed"></p>
+    </article>
 
-const show=id=>{["s1","s2","s3"].forEach(s=>$(s).classList.toggle("hidden",s!==id));scrollTo(0,0)};
-$("open").onclick=()=>{show("s2");burst(60)};
-$("blow").onclick=()=>{$("cake").classList.add("out");setTimeout(()=>{show("s3");rain()},900)};
-$("again").onclick=()=>{$("cake").classList.remove("out");show("s2")};
+    <div class="stats" id="stats" aria-hidden="true">
+      <div><b data-to="365">0</b><span>days of smiles</span></div>
+      <div><b data-to="52">0</b><span>weeks of joy</span></div>
+      <div><b data-to="1">0</b><span>you, one of a kind</span></div>
+    </div>
 
-/* confetti */
-const cv=$("fx"),c=cv.getContext("2d");let P=[];
-const fit=()=>{cv.width=innerWidth;cv.height=innerHeight};fit();addEventListener("resize",fit);
-const colors=["#ff4f8b","#ffd54a","#6ec1ff","#7be495","#fff","#b388ff"];
-function burst(n){for(let i=0;i<n;i++)P.push({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*14,vy:Math.random()*-12-2,s:6+Math.random()*6,col:colors[i%6],r:Math.random()*6,life:160})}
-function rain(){let k=0;const t=setInterval(()=>{for(let i=0;i<8;i++)P.push({x:Math.random()*innerWidth,y:-10,vx:(Math.random()-.5)*2,vy:2+Math.random()*3,s:6+Math.random()*6,col:colors[(Math.random()*6)|0],r:Math.random()*6,life:300});if(++k>40)clearInterval(t)},100)}
-(function loop(){c.clearRect(0,0,cv.width,cv.height);P=P.filter(p=>p.life-->0);
-for(const p of P){p.x+=p.vx;p.y+=p.vy;p.vy+=.12;p.r+=.1;c.save();c.translate(p.x,p.y);c.rotate(p.r);c.fillStyle=p.col;c.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);c.restore()}
-requestAnimationFrame(loop)})();
-</script>
+    <div class="gallery-wrap" id="galleryWrap" hidden>
+      <h2>Memories</h2>
+      <div class="gallery" id="photos"></div>
+    </div>
+
+    <button class="btn ghost" id="again"><span>Light it again</span></button>
+  </div>
+</section>
+
+<div class="lightbox" id="lb" hidden><button aria-label="Close" id="lbx">×</button><img alt=""></div>
+
+<script src="script.js"></script>
 </body>
 </html>
