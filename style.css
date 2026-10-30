@@ -159,3 +159,15 @@ h1{font-size:clamp(2.8rem,11vw,5rem);line-height:1.05}
 .heart-core small{font-family:var(--serif);font-weight:500;letter-spacing:.3em;text-transform:uppercase;font-size:clamp(.85rem,3.4vw,1.1rem);color:var(--ink);text-shadow:0 0 10px rgba(20,167,255,.6)}
 .cake svg{filter:drop-shadow(0 0 22px rgba(255,46,147,.45))}
 .smoke{background:rgba(255,46,147,.35)}
+
+/* ===== Kawaii fonts ===== */
+:root{--serif:"Pacifico","Fredoka",cursive;--sans:"Fredoka","Kantumruy Pro",system-ui,sans-serif}
+body{font-weight:500}
+h1,h2{font-weight:400;letter-spacing:0;line-height:1.2}
+.eyebrow{letter-spacing:.2em;font-weight:600}
+.name{font-weight:400;letter-spacing:0;text-transform:none;font-size:clamp(1.6rem,6vw,2.2rem)}
+.lead{font-weight:500}
+.letter p{font-weight:500;line-height:2}
+.btn{font-weight:600}
+.stats b{font-family:var(--sans);font-weight:700}
+.heart-core small{font-weight:400;letter-spacing:0;text-transform:none;font-size:clamp(1.3rem,5vw,1.8rem)}
