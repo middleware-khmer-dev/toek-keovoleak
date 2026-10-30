@@ -72,11 +72,12 @@
 
   function birthday() {
     start();
-    const t0 = ctx.currentTime + .4, beat = .6;
-    let t = t0;
-    for (let i = 0; i < HB.length; i += 2) { bell(master, HB[i], t, 1.8, .32); t += HB[i + 1] * beat; }
-    amb.gain.setTargetAtTime(.25, ctx.currentTime, .3);
-    amb.gain.setTargetAtTime(1, t + 1, .8);
+    const now = ctx.currentTime, beat = .62, SHIFT = -5;   // same key (D) as the background loop
+    amb.gain.cancelScheduledValues(now);                  // silence the loop so the tune plays alone
+    amb.gain.setTargetAtTime(0, now, .12);
+    let t = now + .5;
+    for (let i = 0; i < HB.length; i += 2) { bell(master, HB[i] + SHIFT, t, 1.8, .34); t += HB[i + 1] * beat; }
+    amb.gain.setTargetAtTime(1, t + 1.5, 1.2);            // loop fades back in softly afterwards
   }
 
   window.Music = { start, birthday };
