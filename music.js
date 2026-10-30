@@ -4,13 +4,20 @@
   if (!AC) { window.Music = { start() {}, birthday() {} }; return; }
 
   let ctx, master, amb, ambWet, wet, holdUntil = 0, started = false, muted = false, next = 0, bar = 0, btn;
-  const VOL = .55, EIGHTH = 60 / 66 / 2;
+  const VOL = .55, EIGHTH = 60 / 60 / 2;
   const hz = m => 440 * Math.pow(2, (m - 69) / 12);
 
   /* gentle looping arpeggios (Canon-style chord loop) */
   const CH = [[62, 66, 69, 74], [61, 64, 69, 73], [62, 66, 71, 74], [61, 66, 69, 73],
               [62, 67, 71, 74], [62, 66, 69, 74], [62, 67, 71, 74], [61, 64, 69, 73]];
   const PAT = [0, 1, 2, 3, 2, 1, 3, 2];
+  /* soft lullaby tune over the chords: [midi, start (eighths), length (eighths)] per bar */
+  const MEL = [
+    [[78, 0, 4], [76, 4, 2], [74, 6, 2]], [[76, 0, 4], [73, 4, 2], [76, 6, 2]],
+    [[78, 0, 4], [74, 4, 2], [71, 6, 2]], [[73, 0, 4], [69, 4, 2], [73, 6, 2]],
+    [[71, 0, 4], [74, 4, 2], [79, 6, 2]], [[78, 0, 4], [74, 4, 2], [78, 6, 2]],
+    [[79, 0, 3], [78, 3, 1], [76, 4, 2], [74, 6, 2]], [[76, 0, 4], [73, 4, 4]]
+  ];
 
   /* "Happy Birthday" (traditional, public domain): [midi, beats] */
   const HB = [67, .75, 67, .25, 69, 1, 67, 1, 72, 1, 71, 2,
@@ -23,7 +30,7 @@
     master = ctx.createGain(); master.gain.value = VOL; master.connect(ctx.destination);
     amb = ctx.createGain(); amb.connect(master);
     const d = ctx.createDelay(1), fb = ctx.createGain(), wg = ctx.createGain();
-    d.delayTime.value = .32; fb.gain.value = .38; wg.gain.value = .35;
+    d.delayTime.value = .32; fb.gain.value = .38; wg.gain.value = .42;
     wet = ctx.createGain(); ambWet = ctx.createGain(); ambWet.connect(wet);   // ambient echo send has its own level
     wet.connect(d); d.connect(fb); fb.connect(d); d.connect(wg); wg.connect(master);
   }
@@ -33,7 +40,7 @@
     g.gain.setValueAtTime(0, t);
     g.gain.linearRampToValueAtTime(v, t + .008);
     g.gain.exponentialRampToValueAtTime(.0001, t + dur);
-    [[1, 1], [2, .28], [3.01, .12], [4.2, .05]].forEach(([r, a]) => {
+    [[1, 1], [2, .2], [3.01, .06]].forEach(([r, a]) => {
       const o = ctx.createOscillator(), og = ctx.createGain();
       o.type = "sine"; o.frequency.value = f * r; og.gain.value = a;
       o.connect(og); og.connect(g); o.start(t); o.stop(t + dur + .05);
@@ -41,12 +48,29 @@
     g.connect(out); g.connect(send);
   }
 
+  function pad(m, t, dur, v) {                    // warm sustained pad note
+    const g = ctx.createGain(), lp = ctx.createBiquadFilter();
+    lp.type = "lowpass"; lp.frequency.value = 1100;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(v, t + 1);
+    g.gain.setValueAtTime(v, t + dur - 1.2);
+    g.gain.linearRampToValueAtTime(0, t + dur + .4);
+    [["sine", -4], ["triangle", 4]].forEach(([type, cents]) => {
+      const o = ctx.createOscillator();
+      o.type = type; o.frequency.value = hz(m); o.detune.value = cents;
+      o.connect(lp); o.start(t); o.stop(t + dur + .5);
+    });
+    lp.connect(g); g.connect(amb); g.connect(ambWet);
+  }
+
   function sched() {
     while (next < ctx.currentTime + 1.2) {
       if (next < holdUntil) { next = holdUntil; continue; }   // nothing scheduled while the birthday tune plays
       const c = CH[bar % CH.length];
-      for (let i = 0; i < 8; i++) bell(amb, ambWet, c[PAT[i]], next + i * EIGHTH, 2.2, .15);
-      bell(amb, ambWet, c[0] - 12, next, 3.2, .2);
+      const bt = 8 * EIGHTH;
+      [c[0] - 12, c[1], c[2]].forEach(m => pad(m, next, bt + .6, .05));
+      for (let i = 0; i < 8; i++) bell(amb, ambWet, c[PAT[i]], next + i * EIGHTH, 2, .07);
+      (MEL[bar % MEL.length] || []).forEach(([m, st, ln]) => bell(amb, ambWet, m, next + st * EIGHTH, Math.max(1.6, ln * EIGHTH + 1), .13));
       next += 8 * EIGHTH; bar++;
     }
   }
