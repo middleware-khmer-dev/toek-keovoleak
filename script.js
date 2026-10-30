@@ -1,11 +1,12 @@
 /* ===== EDIT HERE ===== */
 const CONFIG = {
+  birthday: "2003-10-30",   // date of birth (YYYY-MM-DD)
   name: "Toek Keovoleak",   // or add ?name=Someone to the URL
   message: [
     "This birthday, may your face be full of bright smiles and your heart full of peace. 🌸",
     "May every day of your life shine as bright as the candle on this cake, and may all your dreams come true. ✨",
     "You are someone truly special who gives life meaning. May you have good health, good luck, and love all through your life. 💖",
-    "Happy Birthday, Toek Keovoleak! 🎂"
+    "Happy {age} Birthday, Toek Keovoleak! 🎂"
   ],
   photoBase: "https://pub-33366a170f57436292f2db8cf9762c41.r2.dev/bubu/bubu/",  // R2 bucket "bubu", folder bubu/bubu/ (public URL)
   photos: [
@@ -49,7 +50,7 @@ function celebrate() {
 /* ---------- typewriter ---------- */
 let typing = 0;
 function typeMessage() {
-  const el = $("msg"), box = el.parentElement, text = CONFIG.message.join("\n\n");
+  const el = $("msg"), box = el.parentElement, text = CONFIG.message.join("\n\n").replace("{age}", ord(age.years));
   const id = ++typing;
   el.style.whiteSpace = "pre-wrap";
   box.classList.remove("done");
@@ -64,13 +65,24 @@ function typeMessage() {
   })();
 }
 
-/* ---------- counters ---------- */
+/* ---------- age & counters ---------- */
+function ageNow() {
+  const [y, m, d] = CONFIG.birthday.split("-").map(Number), now = new Date();
+  let years = now.getFullYear() - y, months = years * 12 + now.getMonth() + 1 - m;
+  if (now.getMonth() + 1 < m || (now.getMonth() + 1 === m && now.getDate() < d)) years--;
+  if (now.getDate() < d) months--;
+  const days = Math.floor((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(y, m - 1, d)) / 864e5);
+  return { years, months, days };
+}
+const ord = n => n + (["th", "st", "nd", "rd"][(n % 100 >> 3 ^ 1 && n % 10 < 4) ? n % 10 : 0]);
+const age = ageNow();
+$("ageLine").textContent = "Celebrating " + ord(age.years) + " birthday";
 function countUp() {
   document.querySelectorAll("#stats b").forEach(b => {
-    const to = +b.dataset.to, t0 = performance.now(), dur = reduce ? 1 : 1800;
+    const to = age[b.dataset.k], t0 = performance.now(), dur = reduce ? 1 : 1800;
     (function tick(t) {
       const p = Math.min((t - t0) / dur, 1);
-      b.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      b.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))).toLocaleString("en-US");
       if (p < 1) requestAnimationFrame(tick);
     })(t0);
   });
