@@ -20,6 +20,7 @@ const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const who = new URLSearchParams(location.search).get("name") || CONFIG.name;
 $("who").textContent = "For " + who;
 $("who2").textContent = who;
+$("who3").textContent = who;
 
 /* ---------- screens ---------- */
 const order = ["s1", "s2", "s3"];
@@ -90,21 +91,56 @@ function countUp() {
 
 /* ---------- gallery ---------- */
 let loaded = false;
+/* Arrange n photos evenly along a heart outline */
+function heartLayout(box, imgs) {
+  const n = imgs.length, N = 2000, pts = [];
+  for (let i = 0; i <= N; i++) {
+    const t = i / N * 2 * Math.PI;
+    pts.push([16 * Math.pow(Math.sin(t), 3),
+      -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))]);
+  }
+  const dist = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1]);
+  /* walk the outline placing a tile every `step` units (straight-line), starting at the top dip */
+  const walk = step => {
+    const out = [0];
+    for (let i = 1, cur = 0; i < N; i++) if (dist(pts[i], pts[cur]) >= step) { out.push(i); cur = i; }
+    return out;
+  };
+  const fits = step => { const w = walk(step); return w.length >= n && dist(pts[w[n - 1]], pts[0]) >= step; };
+  let lo = 1, hi = 20;
+  for (let it = 0; it < 30; it++) { const mid = (lo + hi) / 2; if (fits(mid)) lo = mid; else hi = mid; }
+  const idx = walk(lo).slice(0, n), d = lo * .92;      // tile diameter (heart units)
+  const ys = pts.map(p => p[1]), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const W = 32 + d, H = y1 - y0 + d;
+  box.style.aspectRatio = W / H;
+  imgs.forEach((img, k) => {
+    const [x, y] = pts[idx[k]];
+    img.style.width = d / W * 100 + "%";
+    img.style.left = (x + 16 + d / 2) / W * 100 + "%";
+    img.style.top = (y - y0 + d / 2) / H * 100 + "%";
+  });
+}
 function loadPhotos() {
   if (loaded) return;
   loaded = true;
-  const grid = $("photos"), wrap = $("galleryWrap");
+  const box = $("photos"), wrap = $("galleryWrap"), ok = [];
+  let pending = CONFIG.photos.length;
+  const done = () => {
+    if (--pending) return;
+    if (!ok.length) return;
+    wrap.hidden = false;
+    ok.sort((p, q) => p.dataset.n - q.dataset.n);
+    ok.forEach(i => box.appendChild(i));
+    heartLayout(box, ok);
+    ok.forEach((img, n) => setTimeout(() => img.classList.add("in"), reduce ? 0 : 140 * n));
+  };
   CONFIG.photos.forEach((name, n) => {
     const img = new Image();
     img.alt = "Memory " + (n + 1);
-    img.onerror = () => img.remove();
-    img.onload = () => {
-      wrap.hidden = false;
-      setTimeout(() => img.classList.add("in"), 120 * n);
-    };
+    img.onload = () => { img.dataset.n = n; ok.push(img); done(); };
+    img.onerror = done;
     img.onclick = () => openLightbox(img.src);
     img.src = CONFIG.photoBase + name;
-    grid.appendChild(img);
   });
 }
 const lb = $("lb");
