@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="km">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,26 +44,26 @@ button:active{transform:translateY(4px);box-shadow:0 2px 0 #c42e69}
   <div style="font-size:3rem">🎈🎉🎈</div>
   <h1>Happy Birthday</h1>
   <p class="name" id="who"></p>
-  <p class="sub">មានអ្វីពិសេសមួយសម្រាប់អ្នក… សូមចុចប៊ូតុងខាងក្រោម 💖</p>
-  <button id="open">បើកអំណោយ 🎁</button>
+  <p class="sub">Something special is waiting for you… tap the button below 💖</p>
+  <button id="open">Open your gift 🎁</button>
 </section>
 
 <section id="s2" class="hidden">
-  <p class="sub">បង្កាត់ភ្លើង... ហើយបន់ស្រន់មួយ រួចផ្លុំទៀនទៅ 🕯️</p>
+  <p class="sub">Make a wish… then blow out the candle 🕯️</p>
   <div class="cake" id="cake">
     <div class="layer l2"></div><div class="layer l1"></div>
     <div class="candle"><div class="flame"></div></div>
   </div>
-  <button id="blow">ផ្លុំទៀន 💨</button>
+  <button id="blow">Blow the candle 💨</button>
 </section>
 
 <section id="s3" class="hidden">
-  <h1 class="fade">សួស្តីថ្ងៃកំណើត! 🎂</h1>
+  <h1 class="fade">Happy Birthday! 🎂</h1>
   <div class="card fade" style="animation-delay:.4s">
     <p id="msg"></p>
     <div class="photos" id="photos"></div>
   </div>
-  <button id="again">ចាក់ភ្លើងឡើងវិញ 🎆</button>
+  <button id="again">Light it again 🎆</button>
 </section>
 
 <script>
@@ -82,7 +82,7 @@ const CONFIG = {
 
 const $=id=>document.getElementById(id);
 const q=new URLSearchParams(location.search);
-$("who").textContent="សម្រាប់ "+(q.get("name")||CONFIG.name)+" 💕";
+$("who").textContent="For "+(q.get("name")||CONFIG.name)+" 💕";
 $("msg").innerHTML=CONFIG.message.join("<br>");
 CONFIG.photos.forEach(src=>{const i=new Image();i.alt="";i.loading="lazy";i.onerror=()=>i.remove();i.src=src;$("photos").appendChild(i)});
 
