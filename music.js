@@ -3,7 +3,7 @@
   const AC = window.AudioContext || window.webkitAudioContext;
   if (!AC) { window.Music = { start() {}, birthday() {} }; return; }
 
-  let ctx, master, amb, wet, started = false, muted = false, next = 0, bar = 0, btn;
+  let ctx, master, amb, ambWet, wet, holdUntil = 0, started = false, muted = false, next = 0, bar = 0, btn;
   const VOL = .55, EIGHTH = 60 / 66 / 2;
   const hz = m => 440 * Math.pow(2, (m - 69) / 12);
 
@@ -24,10 +24,11 @@
     amb = ctx.createGain(); amb.connect(master);
     const d = ctx.createDelay(1), fb = ctx.createGain(), wg = ctx.createGain();
     d.delayTime.value = .32; fb.gain.value = .38; wg.gain.value = .35;
-    wet = ctx.createGain(); wet.connect(d); d.connect(fb); fb.connect(d); d.connect(wg); wg.connect(master);
+    wet = ctx.createGain(); ambWet = ctx.createGain(); ambWet.connect(wet);   // ambient echo send has its own level
+    wet.connect(d); d.connect(fb); fb.connect(d); d.connect(wg); wg.connect(master);
   }
 
-  function bell(out, m, t, dur, v) {              // music-box style tone
+  function bell(out, send, m, t, dur, v) {              // music-box style tone
     const f = hz(m), g = ctx.createGain();
     g.gain.setValueAtTime(0, t);
     g.gain.linearRampToValueAtTime(v, t + .008);
@@ -37,14 +38,15 @@
       o.type = "sine"; o.frequency.value = f * r; og.gain.value = a;
       o.connect(og); og.connect(g); o.start(t); o.stop(t + dur + .05);
     });
-    g.connect(out); g.connect(wet);
+    g.connect(out); g.connect(send);
   }
 
   function sched() {
     while (next < ctx.currentTime + 1.2) {
+      if (next < holdUntil) { next = holdUntil; continue; }   // nothing scheduled while the birthday tune plays
       const c = CH[bar % CH.length];
-      for (let i = 0; i < 8; i++) bell(amb, c[PAT[i]], next + i * EIGHTH, 2.2, .15);
-      bell(amb, c[0] - 12, next, 3.2, .2);
+      for (let i = 0; i < 8; i++) bell(amb, ambWet, c[PAT[i]], next + i * EIGHTH, 2.2, .15);
+      bell(amb, ambWet, c[0] - 12, next, 3.2, .2);
       next += 8 * EIGHTH; bar++;
     }
   }
@@ -73,11 +75,12 @@
   function birthday() {
     start();
     const now = ctx.currentTime, beat = .62, SHIFT = -5;   // same key (D) as the background loop
-    amb.gain.cancelScheduledValues(now);                  // silence the loop so the tune plays alone
-    amb.gain.setTargetAtTime(0, now, .12);
-    let t = now + .5;
-    for (let i = 0; i < HB.length; i += 2) { bell(master, HB[i] + SHIFT, t, 1.8, .34); t += HB[i + 1] * beat; }
-    amb.gain.setTargetAtTime(1, t + 1.5, 1.2);            // loop fades back in softly afterwards
+    const fade = (g, v, t, k) => { g.gain.cancelScheduledValues(now); g.gain.setTargetAtTime(v, t, k); };
+    fade(amb, 0, now, .05); fade(ambWet, 0, now, .05);    // background music off completely
+    let t = now + 1.2;                                    // short gap so the echo tail dies away
+    for (let i = 0; i < HB.length; i += 2) { bell(master, wet, HB[i] + SHIFT, t, 1.8, .34); t += HB[i + 1] * beat; }
+    holdUntil = t + 1.5;                                  // loop restarts after the tune has finished
+    amb.gain.setTargetAtTime(1, holdUntil, .8); ambWet.gain.setTargetAtTime(1, holdUntil, .8);
   }
 
   window.Music = { start, birthday };
