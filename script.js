@@ -39,13 +39,13 @@ $("open").onclick = () => {
   box.hidden = false;
   let n = 3;
   (function tick() {
-    if (n === 0) {                                    // 3-2-1 done: ask her to close her eyes and wish while the tune plays
+    if (n === 0) {                                    // 3-2-1 done: ask her to close her eyes and wish
       num.hidden = true; $("wish").hidden = false;
-      Music.birthday(.4);
-      setTimeout(() => {
+      setTimeout(() => {                              // after 3 s of silence, the tune begins
         box.hidden = true; $("wish").hidden = true; num.hidden = false; $("open").disabled = false;
         show("s2"); burst(innerWidth / 2, innerHeight / 2, 80);
-      }, 5600);
+        Music.birthday(.2);
+      }, 3000);
       return;
     }
     num.textContent = n--;
