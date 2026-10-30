@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Happy Birthday 🎂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#ffd1e3;--bg2:#c9b6ff;--ink:#4a1d4f;--accent:#ff4f8b;--card:rgba(255,255,255,.75)}
+*{box-sizing:border-box;margin:0}
+body{min-height:100vh;font-family:"Kantumruy Pro",system-ui,sans-serif;color:var(--ink);
+background:linear-gradient(160deg,var(--bg1),var(--bg2));overflow-x:hidden;text-align:center}
+canvas{position:fixed;inset:0;pointer-events:none;z-index:5}
+section{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px;gap:18px}
+h1{font-family:"Dancing Script","Kantumruy Pro",cursive;font-size:clamp(2.6rem,10vw,5rem);color:var(--accent);text-shadow:0 3px 0 #fff}
+.name{font-size:clamp(1.6rem,6vw,2.6rem);font-weight:700}
+.sub{max-width:34rem;line-height:1.8;font-size:1.05rem}
+button{font:inherit;font-weight:600;border:0;border-radius:999px;padding:14px 30px;background:var(--accent);color:#fff;
+box-shadow:0 6px 0 #c42e69;cursor:pointer;transition:.1s}
+button:active{transform:translateY(4px);box-shadow:0 2px 0 #c42e69}
+.cake{position:relative;width:200px;height:170px;margin-top:40px}
+.layer{position:absolute;left:0;right:0;border-radius:14px}
+.l1{bottom:0;height:70px;background:#ff8fb5}
+.l2{bottom:70px;left:25px;right:25px;height:55px;background:#ffb8d1}
+.l1::after,.l2::after{content:"";position:absolute;top:0;left:0;right:0;height:16px;border-radius:14px 14px 40px 40px;background:#fff}
+.candle{position:absolute;bottom:125px;left:calc(50% - 5px);width:10px;height:36px;background:repeating-linear-gradient(45deg,#fff 0 6px,#6ec1ff 6px 12px);border-radius:3px}
+.flame{position:absolute;top:-24px;left:-3px;width:16px;height:22px;background:radial-gradient(#fff 15%,#ffd54a 45%,#ff8a00);border-radius:50% 50% 50% 50%/60% 60% 40% 40%;animation:fl .3s infinite alternate;transition:opacity .4s}
+.out .flame{opacity:0}
+@keyframes fl{to{transform:scale(1.15,.92) rotate(3deg)}}
+.card{background:var(--card);backdrop-filter:blur(6px);border-radius:24px;padding:28px 24px;max-width:36rem;width:100%;box-shadow:0 10px 30px rgba(74,29,79,.18)}
+.card p{line-height:2;font-size:1.1rem}
+.hidden{display:none}
+.fade{animation:in .9s both}
+@keyframes in{from{opacity:0;transform:translateY(20px)}}
+.photos{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px}
+.photos img{width:140px;height:140px;object-fit:cover;border-radius:16px;border:4px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+
+<section id="s1">
+  <div style="font-size:3rem">🎈🎉🎈</div>
+  <h1>Happy Birthday</h1>
+  <p class="name" id="who"></p>
+  <p class="sub">មានអ្វីពិសេសមួយសម្រាប់អ្នក… សូមចុចប៊ូតុងខាងក្រោម 💖</p>
+  <button id="open">បើកអំណោយ 🎁</button>
+</section>
+
+<section id="s2" class="hidden">
+  <p class="sub">បង្កាត់ភ្លើង... ហើយបន់ស្រន់មួយ រួចផ្លុំទៀនទៅ 🕯️</p>
+  <div class="cake" id="cake">
+    <div class="layer l2"></div><div class="layer l1"></div>
+    <div class="candle"><div class="flame"></div></div>
+  </div>
+  <button id="blow">ផ្លុំទៀន 💨</button>
+</section>
+
+<section id="s3" class="hidden">
+  <h1 class="fade">សួស្តីថ្ងៃកំណើត! 🎂</h1>
+  <div class="card fade" style="animation-delay:.4s">
+    <p id="msg"></p>
+    <div class="photos" id="photos"></div>
+  </div>
+  <button id="again">ចាក់ភ្លើងឡើងវិញ 🎆</button>
+</section>
+
+<script>
+/* ===== កែប្រែនៅទីនេះ / EDIT HERE ===== */
+const CONFIG = {
+  name: "Toek Keovoleak",   // ឈ្មោះនាង (ឬបន្ថែម ?name=ឈ្មោះ ក្នុង URL)
+  message: [
+    "This birthday, may your face be full of bright smiles and your heart full of peace 🌸",
+    "May every day of your life shine as bright as the candle on this cake, and may all your dreams come true ✨",
+    "You are someone truly special who gives life meaning. May you have good health, good luck, and love all through your life 💖",
+    "Happy Birthday, Toek Keovoleak! 🎂"
+  ],
+  photos: ["photos/1.jpg","photos/2.jpg","photos/3.jpg","photos/4.jpg"]  // ដាក់រូបក្នុង folder photos/ (រូបណាមិនមាន នឹងត្រូវបានលាក់)
+};
+/* ===================================== */
+
+const $=id=>document.getElementById(id);
+const q=new URLSearchParams(location.search);
+$("who").textContent="សម្រាប់ "+(q.get("name")||CONFIG.name)+" 💕";
+$("msg").innerHTML=CONFIG.message.join("<br>");
+CONFIG.photos.forEach(src=>{const i=new Image();i.alt="";i.loading="lazy";i.onerror=()=>i.remove();i.src=src;$("photos").appendChild(i)});
+
+const show=id=>{["s1","s2","s3"].forEach(s=>$(s).classList.toggle("hidden",s!==id));scrollTo(0,0)};
+$("open").onclick=()=>{show("s2");burst(60)};
+$("blow").onclick=()=>{$("cake").classList.add("out");setTimeout(()=>{show("s3");rain()},900)};
+$("again").onclick=()=>{$("cake").classList.remove("out");show("s2")};
+
+/* confetti */
+const cv=$("fx"),c=cv.getContext("2d");let P=[];
+const fit=()=>{cv.width=innerWidth;cv.height=innerHeight};fit();addEventListener("resize",fit);
+const colors=["#ff4f8b","#ffd54a","#6ec1ff","#7be495","#fff","#b388ff"];
+function burst(n){for(let i=0;i<n;i++)P.push({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*14,vy:Math.random()*-12-2,s:6+Math.random()*6,col:colors[i%6],r:Math.random()*6,life:160})}
+function rain(){let k=0;const t=setInterval(()=>{for(let i=0;i<8;i++)P.push({x:Math.random()*innerWidth,y:-10,vx:(Math.random()-.5)*2,vy:2+Math.random()*3,s:6+Math.random()*6,col:colors[(Math.random()*6)|0],r:Math.random()*6,life:300});if(++k>40)clearInterval(t)},100)}
+(function loop(){c.clearRect(0,0,cv.width,cv.height);P=P.filter(p=>p.life-->0);
+for(const p of P){p.x+=p.vx;p.y+=p.vy;p.vy+=.12;p.r+=.1;c.save();c.translate(p.x,p.y);c.rotate(p.r);c.fillStyle=p.col;c.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);c.restore()}
+requestAnimationFrame(loop)})();
+</script>
+</body>
+</html>
