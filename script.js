@@ -33,25 +33,15 @@ function show(id) {
   scrollTo(0, 0);
 }
 $("open").onclick = () => {
-  const box = $("count"), num = $("countNum");
+  const box = $("count");
   $("open").disabled = true;
-  Music.start(true);                                  // unlock audio now; the tune starts after the countdown
-  box.hidden = false;
-  let n = 3;
-  (function tick() {
-    if (n === 0) {                                    // 3-2-1 done: ask her to close her eyes and wish
-      num.hidden = true; $("wish").hidden = false;
-      setTimeout(() => {                              // after 3 s of silence, the tune begins
-        box.hidden = true; $("wish").hidden = true; num.hidden = false; $("open").disabled = false;
-        show("s2"); burst(innerWidth / 2, innerHeight / 2, 80);
-        Music.birthday(.2);
-      }, 3000);
-      return;
-    }
-    num.textContent = n--;
-    num.style.animation = "none"; void num.offsetWidth; num.style.animation = "";   // restart pop animation
-    setTimeout(tick, 1000);
-  })();
+  Music.start(true);                                  // unlock audio now; the tune starts after the wish
+  $("countNum").hidden = true; $("wish").hidden = false; box.hidden = false;
+  setTimeout(() => {                                  // after 3 s of silence, the tune begins
+    box.hidden = true; $("wish").hidden = true; $("open").disabled = false;
+    show("s2"); burst(innerWidth / 2, innerHeight / 2, 80);
+    Music.birthday(.2);
+  }, 3000);
 };
 $("blow").onclick = () => {
   $("cake").classList.add("out");
