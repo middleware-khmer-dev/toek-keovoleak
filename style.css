@@ -201,3 +201,9 @@ body{background:
 .music-btn{position:fixed;right:16px;bottom:16px;z-index:70;width:48px;height:48px;border-radius:50%;border:1.5px solid #fff;font-size:1.3rem;cursor:pointer;
   background:rgba(255,255,255,.85);box-shadow:0 0 18px rgba(255,46,147,.5),0 4px 14px -4px rgba(0,0,0,.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .2s}
 .music-btn:hover{transform:scale(1.1)}
+
+.count{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:rgba(255,255,255,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.count span{font-family:var(--serif);font-size:clamp(7rem,38vw,14rem);line-height:1;
+  background:linear-gradient(135deg,#e0127a,#8a3fe0 55%,#0a74d1);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 22px rgba(255,46,147,.45));animation:countPop 1s ease-out both}
+@keyframes countPop{0%{opacity:0;transform:scale(.4)}20%{opacity:1;transform:scale(1.15)}45%{transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:scale(.9)}}

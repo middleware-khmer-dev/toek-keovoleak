@@ -3,7 +3,7 @@
   const AC = window.AudioContext || window.webkitAudioContext;
   if (!AC) { window.Music = { start() {}, birthday() {} }; return; }
 
-  let ctx, master, amb, ambWet, wet, holdUntil = 0, started = false, muted = false, next = 0, bar = 0, btn;
+  let ctx, master, amb, ambWet, wet, holdUntil = 0, pending = false, started = false, muted = false, next = 0, bar = 0, btn;
   const VOL = .55, EIGHTH = 60 / 60 / 2;
   const hz = m => 440 * Math.pow(2, (m - 69) / 12);
 
@@ -68,6 +68,7 @@
   }
 
   function sched() {
+    if (pending) return;                               // loop waits until the birthday tune has been started
     while (next < ctx.currentTime + 1.2) {
       if (next < holdUntil) { next = holdUntil; continue; }   // nothing scheduled while the birthday tune plays
       const c = CH[bar % CH.length];
@@ -93,21 +94,23 @@
   function start(quiet) {                          // quiet: the tune plays first, loop joins later
     if (started) { if (ctx.state === "suspended" && !muted) ctx.resume(); return; }
     started = true; init(); ctx.resume();
-    next = ctx.currentTime + .1; if (!quiet) sched(); setInterval(sched, 250);
+    pending = !!quiet;
+    if (quiet) { amb.gain.value = 0; ambWet.gain.value = 0; }
+    next = ctx.currentTime + .1; sched(); setInterval(sched, 250);
     makeButton();
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) ctx.suspend(); else if (!muted) ctx.resume();
     });
   }
 
-  function birthday() {
+  function birthday(delay) {
     start(true);
     const now = ctx.currentTime, beat = .62, SHIFT = -5;   // same key (D) as the background loop
     const fade = (g, v, t, k) => { g.gain.cancelScheduledValues(now); g.gain.setTargetAtTime(v, t, k); };
     fade(amb, 0, now, .05); fade(ambWet, 0, now, .05);    // background music off completely
-    let t = now + 1.2;                                    // short gap so the echo tail dies away
+    let t = now + (delay == null ? .5 : delay);           // short pause before the tune
     for (let i = 0; i < HB.length; i += 2) { bell(master, wet, HB[i] + SHIFT, t, 1.8, .34); t += HB[i + 1] * beat; }
-    holdUntil = t + 1.5;                                  // loop restarts after the tune has finished
+    holdUntil = t + 1.5; pending = false;                                  // loop restarts after the tune has finished
     amb.gain.setTargetAtTime(1, holdUntil, .8); ambWet.gain.setTargetAtTime(1, holdUntil, .8);
   }
 

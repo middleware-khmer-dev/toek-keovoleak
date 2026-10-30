@@ -32,7 +32,23 @@ function show(id) {
   $("bar").style.width = ((order.indexOf(id) + 1) / order.length * 100) + "%";
   scrollTo(0, 0);
 }
-$("open").onclick = () => { Music.birthday(); show("s2"); burst(innerWidth / 2, innerHeight / 2, 80); };
+$("open").onclick = () => {
+  const box = $("count"), num = $("countNum");
+  $("open").disabled = true;
+  Music.start(true);                                  // unlock audio now; the tune starts after the countdown
+  box.hidden = false;
+  let n = 3;
+  (function tick() {
+    if (n === 0) {
+      box.hidden = true; $("open").disabled = false;
+      show("s2"); burst(innerWidth / 2, innerHeight / 2, 80); Music.birthday(.4);
+      return;
+    }
+    num.textContent = n--;
+    num.style.animation = "none"; void num.offsetWidth; num.style.animation = "";   // restart pop animation
+    setTimeout(tick, 1000);
+  })();
+};
 $("blow").onclick = () => {
   $("cake").classList.add("out");
   $("blow").disabled = true;
