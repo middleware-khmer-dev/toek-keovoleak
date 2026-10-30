@@ -3,11 +3,11 @@ const CONFIG = {
   birthday: "2003-10-30",   // date of birth (YYYY-MM-DD)
   name: "Toek Keovoleak",   // or add ?name=Someone to the URL
   message: [
-    "Happy Birthday, my love! 🎂 Thank you for being the best part of my life. Every day with you feels like a gift.",
+    "Happy Birthday, my Bubu! 🎂 Thank you for being the best part of my life. Every day with you feels like a gift.",
     "You are studying to heal others, and I am so proud of you. The world will be lucky to have a doctor with a heart as kind as yours. 🩺💖",
-    "On the days when studying gets heavy, remember that I believe in you. Rest well, eat well, and take care of yourself too.",
+    "On the days when studying gets heavy, Bubu, remember that I believe in you. Rest well, eat well, and take care of yourself too.",
     "May this new year bring you good health, good grades, and every dream you work so hard for. I'll be right beside you for all of it. ♥",
-    "Happy Birthday, Toek Keovoleak! I love you. 🎂"
+    "Happy Birthday, Bubu! I love you. 🎂"
   ],
   photoBase: "https://pub-33366a170f57436292f2db8cf9762c41.r2.dev/bubu/bubu/",  // R2 bucket "bubu", folder bubu/bubu/ (public URL)
   photos: [
