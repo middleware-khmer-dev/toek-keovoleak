@@ -7,8 +7,10 @@ const CONFIG = {
     "You are someone truly special who gives life meaning. May you have good health, good luck, and love all through your life. 💖",
     "Happy Birthday, Toek Keovoleak! 🎂"
   ],
-  photoBase: "https://pub-33366a170f57436292f2db8cf9762c41.r2.dev/",  // R2 bucket "bubu" (public URL)
-  photos: ["1.jpg", "2.jpg", "3.jpg", "4.jpg"]  // file names in the bucket; missing ones are hidden
+  photoBase: "https://pub-33366a170f57436292f2db8cf9762c41.r2.dev/bubu/bubu/",  // R2 bucket "bubu", folder bubu/bubu/ (public URL)
+  photos: [
+    "photo_2026-10-30_13-47-00.jpg", "photo_2026-10-30_13-47-19.jpg", "photo_2026-10-30_13-47-26.jpg", "photo_2026-10-30_13-47-29.jpg", "photo_2026-10-30_13-47-42.jpg", "photo_2026-10-30_13-47-46.jpg", "photo_2026-10-30_13-47-51.jpg", "photo_2026-10-30_13-47-55.jpg", "photo_2026-10-30_13-48-01.jpg", "photo_2026-10-30_13-48-05.jpg", "photo_2026-10-30_13-48-09.jpg", "photo_2026-10-30_13-48-13.jpg", "photo_2026-10-30_13-48-17.jpg", "photo_2026-10-30_13-48-21.jpg", "photo_2026-10-30_13-48-24.jpg", "photo_2026-10-30_13-48-28.jpg", "photo_2026-10-30_13-48-32.jpg"
+  ]  // file names in the folder; missing ones are hidden
 };
 /* ===================== */
 
@@ -83,7 +85,6 @@ function loadPhotos() {
   CONFIG.photos.forEach((name, n) => {
     const img = new Image();
     img.alt = "Memory " + (n + 1);
-    img.loading = "lazy";
     img.onerror = () => img.remove();
     img.onload = () => {
       wrap.hidden = false;
