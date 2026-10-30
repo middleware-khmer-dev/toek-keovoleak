@@ -76,7 +76,8 @@ const CONFIG = {
     "You are someone truly special who gives life meaning. May you have good health, good luck, and love all through your life 💖",
     "Happy Birthday, Toek Keovoleak! 🎂"
   ],
-  photos: ["photos/1.jpg","photos/2.jpg","photos/3.jpg","photos/4.jpg"]  // ដាក់រូបក្នុង folder photos/ (រូបណាមិនមាន នឹងត្រូវបានលាក់)
+  photoBase: "https://pub-33366a170f57436292f2db8cf9762c41.r2.dev/",  // R2 bucket "bubu" (public URL)
+  photos: ["1.jpg","2.jpg","3.jpg","4.jpg"]  // ឈ្មោះឯកសារក្នុង bucket (រូបណាមិនមាន នឹងត្រូវបានលាក់)
 };
 /* ===================================== */
 
@@ -84,7 +85,7 @@ const $=id=>document.getElementById(id);
 const q=new URLSearchParams(location.search);
 $("who").textContent="For "+(q.get("name")||CONFIG.name)+" 💕";
 $("msg").innerHTML=CONFIG.message.join("<br>");
-CONFIG.photos.forEach(src=>{const i=new Image();i.alt="";i.loading="lazy";i.onerror=()=>i.remove();i.src=src;$("photos").appendChild(i)});
+CONFIG.photos.forEach(src=>{const i=new Image();i.alt="";i.loading="lazy";i.onerror=()=>i.remove();i.src=CONFIG.photoBase+src;$("photos").appendChild(i)});
 
 const show=id=>{["s1","s2","s3"].forEach(s=>$(s).classList.toggle("hidden",s!==id));scrollTo(0,0)};
 $("open").onclick=()=>{show("s2");burst(60)};
