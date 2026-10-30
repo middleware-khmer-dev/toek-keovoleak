@@ -32,11 +32,10 @@ function show(id) {
   $("bar").style.width = ((order.indexOf(id) + 1) / order.length * 100) + "%";
   scrollTo(0, 0);
 }
-$("open").onclick = () => { Music.start(); show("s2"); burst(innerWidth / 2, innerHeight / 2, 80); };
+$("open").onclick = () => { Music.birthday(); show("s2"); burst(innerWidth / 2, innerHeight / 2, 80); };
 $("blow").onclick = () => {
   $("cake").classList.add("out");
   $("blow").disabled = true;
-  Music.birthday();
   setTimeout(() => { show("s3"); celebrate(); }, 1200);
 };
 $("again").onclick = () => {

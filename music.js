@@ -90,10 +90,10 @@
     master.gain.setTargetAtTime(muted ? 0 : VOL, ctx.currentTime, .1);
   }
 
-  function start() {
+  function start(quiet) {                          // quiet: the tune plays first, loop joins later
     if (started) { if (ctx.state === "suspended" && !muted) ctx.resume(); return; }
     started = true; init(); ctx.resume();
-    next = ctx.currentTime + .1; sched(); setInterval(sched, 250);
+    next = ctx.currentTime + .1; if (!quiet) sched(); setInterval(sched, 250);
     makeButton();
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) ctx.suspend(); else if (!muted) ctx.resume();
@@ -101,7 +101,7 @@
   }
 
   function birthday() {
-    start();
+    start(true);
     const now = ctx.currentTime, beat = .62, SHIFT = -5;   // same key (D) as the background loop
     const fade = (g, v, t, k) => { g.gain.cancelScheduledValues(now); g.gain.setTargetAtTime(v, t, k); };
     fade(amb, 0, now, .05); fade(ambWet, 0, now, .05);    // background music off completely
