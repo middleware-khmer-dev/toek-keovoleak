@@ -112,3 +112,39 @@ h2{font-family:var(--serif);font-size:clamp(1.8rem,6vw,2.6rem);font-weight:600}
 
 @media (max-width:520px){.hero,.stage{padding:44px 22px}.letter{padding:42px 22px 28px}.stats{gap:8px}.stats span{font-size:.7rem}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+
+/* ===== Soft Pastel Dreamy theme ===== */
+:root{
+  --bg:#fff3f8;--ink:#5a3550;--mute:#8f7192;
+  --pink:#ffa9cc;--pinkd:#e5679c;--violet:#d4c1ff;--cyan:#a8dcff;--skyd:#5aaee8;--gold:#e5679c;
+  --glass:rgba(255,255,255,.6);--line:rgba(255,255,255,.9);
+  --serif:"Dancing Script","Kantumruy Pro",cursive;--sans:"Quicksand","Kantumruy Pro",system-ui,sans-serif;
+}
+body{background:
+  radial-gradient(60vmax 50vmax at 8% 6%,#ffd3e6 0%,transparent 60%),
+  radial-gradient(55vmax 50vmax at 95% 12%,#cfe9ff 0%,transparent 60%),
+  radial-gradient(60vmax 55vmax at 85% 95%,#e4d6ff 0%,transparent 60%),
+  radial-gradient(50vmax 45vmax at 5% 92%,#ffe6d6 0%,transparent 60%),#fff6fa fixed}
+.aurora i{filter:blur(70px);opacity:.5}
+.aurora i:nth-child(1){background:#bfe3ff}.aurora i:nth-child(2){background:#ffbfdc;opacity:.55}.aurora i:nth-child(3){background:#dccbff;opacity:.45}
+.glass{background:linear-gradient(145deg,rgba(255,255,255,.85),rgba(255,255,255,.5));border:1.5px solid #fff;border-radius:36px;
+  box-shadow:0 24px 60px -24px rgba(229,103,156,.35),0 6px 18px -8px rgba(90,174,232,.25),inset 0 1px 0 #fff}
+h1,h2{font-weight:700;letter-spacing:0}
+h1{font-size:clamp(3.2rem,12vw,5.6rem);line-height:1.05}
+.eyebrow{color:var(--skyd);letter-spacing:.28em}
+.name{font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,6vw,2.2rem);color:var(--pinkd);letter-spacing:0}
+.shine{background:linear-gradient(100deg,#ff8fbd 10%,#b79cff 40%,#6cc4ff 65%,#ff8fbd 95%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{color:#fff;background:linear-gradient(110deg,#ff9cc6,#c3a8ff 55%,#82cfff);background-size:200% 100%;text-shadow:0 1px 3px rgba(90,53,80,.3);
+  box-shadow:0 14px 30px -10px rgba(229,103,156,.6),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn:hover{box-shadow:0 20px 36px -10px rgba(229,103,156,.7),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn.ghost{background:rgba(255,255,255,.55);border:1.5px solid #fff;color:var(--pinkd);text-shadow:none;box-shadow:0 8px 20px -10px rgba(229,103,156,.4)}
+.progress b{background:linear-gradient(90deg,#ffa9cc,#d4c1ff,#a8dcff)}
+.seal{background:linear-gradient(135deg,#ffa9cc,#c3a8ff);box-shadow:0 8px 20px rgba(229,103,156,.45)}
+.letter p{font-weight:500;color:var(--ink)}
+.stats div{background:rgba(255,255,255,.65);border:1.5px solid #fff;border-radius:26px;box-shadow:0 10px 24px -14px rgba(229,103,156,.45)}
+.stats b{font-family:var(--serif);color:var(--pinkd);font-size:clamp(2.2rem,8vw,3.2rem)}
+.stats div:nth-child(2) b{color:#9b7bf0}.stats div:nth-child(3) b{color:var(--skyd)}
+.heart img{border:3.5px solid #fff;box-shadow:0 8px 20px -6px rgba(229,103,156,.5)}
+.heart-core span{color:#ff8fbd;text-shadow:0 0 30px rgba(255,143,189,.8)}
+.heart-core small{font-family:var(--serif);font-weight:700;font-size:clamp(1.3rem,5vw,1.9rem);color:var(--pinkd)}
+.cake svg{filter:drop-shadow(0 20px 26px rgba(229,103,156,.3))}
