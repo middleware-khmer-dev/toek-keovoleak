@@ -1,7 +1,7 @@
 /* ===== EDIT HERE ===== */
 const CONFIG = {
   birthday: "2003-10-30",   // date of birth (YYYY-MM-DD)
-  name: "Toek Keovoleak",   // or add ?name=Someone to the URL
+  name: "Bubu",   // or add ?name=Someone to the URL
   message: [
     "Happy Birthday, my Bubu! 🎂 Thank you for being the best part of my life. Every day with you feels like a gift.",
     "You are studying to heal others, and I am so proud of you. The world will be lucky to have a doctor with a heart as kind as yours. 🩺💖",
