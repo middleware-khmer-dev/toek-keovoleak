@@ -178,7 +178,7 @@ const cv = $("fx"), c = cv.getContext("2d");
 let P = [];
 const fit = () => { cv.width = innerWidth; cv.height = innerHeight; };
 fit(); addEventListener("resize", fit);
-const colors = ["#ff5c9d", "#ffd66b", "#5ce1ff", "#8a5cff", "#ffffff", "#7be495"];
+const colors = ["#ff7eb3", "#ffb3d1", "#6cc4ff", "#a6dcff", "#e0407f", "#ffd6e7"];
 function burst(x, y, n) {
   if (reduce) return;
   for (let i = 0; i < n; i++) {
@@ -202,7 +202,7 @@ addEventListener("pointerdown", e => { if (e.target.closest("button,.lightbox,im
   for (const s of stars) {
     s.p += s.s;
     sx.globalAlpha = .25 + .75 * Math.abs(Math.sin(s.p));
-    sx.fillStyle = "#fff";
+    sx.fillStyle = "#ff9ccb";
     sx.beginPath(); sx.arc(s.x, s.y, s.r, 0, 6.28); sx.fill();
   }
   c.clearRect(0, 0, cv.width, cv.height);
