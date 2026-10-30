@@ -195,3 +195,5 @@ body{background:
 .aurora i:nth-child(3){background:#ffe6f1;opacity:.4}
 
 .cake-name{font-family:var(--serif);font-size:30px;fill:#fff;stroke:#c40f6c;stroke-width:5px;paint-order:stroke;stroke-linejoin:round}
+
+.tag{font-family:var(--sans);font-weight:600;font-size:clamp(1rem,3.6vw,1.2rem);color:#e0127a;letter-spacing:.04em}
