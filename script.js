@@ -22,6 +22,8 @@ const who = new URLSearchParams(location.search).get("name") || CONFIG.name;
 $("who").textContent = "For " + who;
 $("who2").textContent = who;
 $("who3").textContent = who;
+const cn = $("cakeName"); cn.textContent = who;
+if (who.length > 8) cn.setAttribute("textLength", 170), cn.setAttribute("lengthAdjust", "spacingAndGlyphs");
 
 /* ---------- screens ---------- */
 const order = ["s1", "s2", "s3"];

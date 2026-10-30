@@ -193,3 +193,5 @@ body{background:
 .aurora i:nth-child(1){background:#ffd0e4;opacity:.3}
 .aurora i:nth-child(2){background:#ffb8d8;opacity:.28}
 .aurora i:nth-child(3){background:#ffe6f1;opacity:.4}
+
+.cake-name{font-family:var(--serif);font-size:30px;fill:#fff;stroke:#c40f6c;stroke-width:5px;paint-order:stroke;stroke-linejoin:round}
