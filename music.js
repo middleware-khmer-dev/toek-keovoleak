@@ -13,10 +13,10 @@
   const PAT = [0, 1, 2, 3, 2, 1, 3, 2];
   /* soft lullaby tune over the chords: [midi, start (eighths), length (eighths)] per bar */
   const MEL = [
-    [[78, 0, 4], [76, 4, 2], [74, 6, 2]], [[76, 0, 4], [73, 4, 2], [76, 6, 2]],
+    [[78, 0, 4], [74, 4, 2], [78, 6, 2]], [[76, 0, 4], [73, 4, 2], [76, 6, 2]],
     [[78, 0, 4], [74, 4, 2], [71, 6, 2]], [[73, 0, 4], [69, 4, 2], [73, 6, 2]],
     [[71, 0, 4], [74, 4, 2], [79, 6, 2]], [[78, 0, 4], [74, 4, 2], [78, 6, 2]],
-    [[79, 0, 3], [78, 3, 1], [76, 4, 2], [74, 6, 2]], [[76, 0, 4], [73, 4, 4]]
+    [[79, 0, 4], [74, 4, 2], [71, 6, 2]], [[76, 0, 4], [73, 4, 4]]
   ];
 
   /* "Happy Birthday" (traditional, public domain): [midi, beats] */
@@ -27,12 +27,16 @@
 
   function init() {
     ctx = new AC();
-    master = ctx.createGain(); master.gain.value = VOL; master.connect(ctx.destination);
+    master = ctx.createGain(); master.gain.value = VOL;
+    const comp = ctx.createDynamicsCompressor();          // tames peaks so nothing sounds harsh
+    comp.threshold.value = -24; comp.ratio.value = 4; comp.attack.value = .01; comp.release.value = .3;
+    master.connect(comp); comp.connect(ctx.destination);
     amb = ctx.createGain(); amb.connect(master);
     const d = ctx.createDelay(1), fb = ctx.createGain(), wg = ctx.createGain();
-    d.delayTime.value = .32; fb.gain.value = .38; wg.gain.value = .42;
+    d.delayTime.value = .32; fb.gain.value = .32; wg.gain.value = .42;
     wet = ctx.createGain(); ambWet = ctx.createGain(); ambWet.connect(wet);   // ambient echo send has its own level
-    wet.connect(d); d.connect(fb); fb.connect(d); d.connect(wg); wg.connect(master);
+    const tone = ctx.createBiquadFilter(); tone.type = "lowpass"; tone.frequency.value = 2200;   // darker, softer echoes
+    wet.connect(d); d.connect(tone); tone.connect(fb); fb.connect(d); tone.connect(wg); wg.connect(master);
   }
 
   function bell(out, send, m, t, dur, v) {              // music-box style tone
@@ -40,7 +44,7 @@
     g.gain.setValueAtTime(0, t);
     g.gain.linearRampToValueAtTime(v, t + .008);
     g.gain.exponentialRampToValueAtTime(.0001, t + dur);
-    [[1, 1], [2, .2], [3.01, .06]].forEach(([r, a]) => {
+    [[1, 1], [2, .12]].forEach(([r, a]) => {
       const o = ctx.createOscillator(), og = ctx.createGain();
       o.type = "sine"; o.frequency.value = f * r; og.gain.value = a;
       o.connect(og); og.connect(g); o.start(t); o.stop(t + dur + .05);
@@ -53,12 +57,12 @@
     lp.type = "lowpass"; lp.frequency.value = 1100;
     g.gain.setValueAtTime(0, t);
     g.gain.linearRampToValueAtTime(v, t + 1);
-    g.gain.setValueAtTime(v, t + dur - 1.2);
-    g.gain.linearRampToValueAtTime(0, t + dur + .4);
+    g.gain.setValueAtTime(v, t + dur - .9);
+    g.gain.linearRampToValueAtTime(0, t + dur + .15);
     [["sine", -4], ["triangle", 4]].forEach(([type, cents]) => {
       const o = ctx.createOscillator();
       o.type = type; o.frequency.value = hz(m); o.detune.value = cents;
-      o.connect(lp); o.start(t); o.stop(t + dur + .5);
+      o.connect(lp); o.start(t); o.stop(t + dur + .3);
     });
     lp.connect(g); g.connect(amb); g.connect(ambWet);
   }
@@ -68,7 +72,7 @@
       if (next < holdUntil) { next = holdUntil; continue; }   // nothing scheduled while the birthday tune plays
       const c = CH[bar % CH.length];
       const bt = 8 * EIGHTH;
-      [c[0] - 12, c[1], c[2]].forEach(m => pad(m, next, bt + .6, .05));
+      [c[0] - 12, c[1], c[2]].forEach(m => pad(m, next, bt + .25, .045));
       for (let i = 0; i < 8; i++) bell(amb, ambWet, c[PAT[i]], next + i * EIGHTH, 2, .07);
       (MEL[bar % MEL.length] || []).forEach(([m, st, ln]) => bell(amb, ambWet, m, next + st * EIGHTH, Math.max(1.6, ln * EIGHTH + 1), .13));
       next += 8 * EIGHTH; bar++;
