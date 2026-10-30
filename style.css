@@ -184,3 +184,12 @@ h1,h2{font-weight:400;letter-spacing:0;line-height:1.2}
 .stats div:nth-child(3) b{color:#0a73c9;text-shadow:none}
 .name,.heart-core small{color:#2b2350;text-shadow:none}
 .letter p{color:#2b2350}
+
+/* ===== Background: white + pink ===== */
+body{background:
+  radial-gradient(50vmax 40vmax at 6% 3%,#ffdcec 0%,transparent 62%),
+  radial-gradient(50vmax 42vmax at 100% 100%,#ffd3e7 0%,transparent 62%),
+  #ffffff fixed}
+.aurora i:nth-child(1){background:#ffd0e4;opacity:.3}
+.aurora i:nth-child(2){background:#ffb8d8;opacity:.28}
+.aurora i:nth-child(3){background:#ffe6f1;opacity:.4}
